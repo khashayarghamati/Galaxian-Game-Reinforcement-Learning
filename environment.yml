@@ -19,7 +19,7 @@ dependencies:
   - xz=5.2.5
   - zlib=1.2
   - pip:
-      - torch==1.9.1
+      - torch
       - neptune
       - gymnasium[atari,accept-rom-license]
 prefix: /opt/miniconda3/envs/gal
