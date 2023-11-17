@@ -24,7 +24,7 @@ echo ------------------------------------------------------
 
 echo  -n 'Installing requirements\n'
 
-export PATH=$HOME/miniconda3/bin:$PATH
+export PATH=$HOME/venv/bin:$PATH
 
 source activate gal
 
