@@ -1,0 +1,9 @@
+name: gal
+channels:
+  - defaults
+dependencies:
+  - pip:
+      - torch
+      - neptune
+      - gymnasium[atari,accept-rom-license]
+prefix: /opt/miniconda3/envs/gal
