@@ -3,7 +3,7 @@ channels:
   - defaults
 dependencies:
   - pip:
-      - torch
+      - torch===1.10.2
       - neptune
       - gymnasium[atari,accept-rom-license]
 prefix: /opt/miniconda3/envs/gal
