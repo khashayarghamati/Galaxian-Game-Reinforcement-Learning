@@ -14,7 +14,7 @@ This project is a Python implementation of training an agent to play the Galaxia
 
 2. Install dependencies:
    ```bash
-   pip install -r requirements.txt
+   conda env export > environment.yml
    ```
 
 ## Usage
