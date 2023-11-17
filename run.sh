@@ -24,7 +24,7 @@ echo ------------------------------------------------------
 
 echo  -n 'Installing requirements\n'
 
-export PATH=$HOME/venv/bin:$PATH
+export PATH=/beegfs/general/kg23aay/miniconda3/bin:$PATH
 
 source activate gal
 
