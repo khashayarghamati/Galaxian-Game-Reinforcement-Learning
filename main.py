@@ -28,7 +28,7 @@ env.reset()
 save_dir = Path('checkpoints') / datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%S')
 save_dir.mkdir(parents=True)
 
-vid = VideoRecorder(env=env, path='/beegfs/general/kg23aay/0.mp4')
+# vid = VideoRecorder(env=env, path='/beegfs/general/kg23aay/0.mp4')
 
 checkpoint = None
 agent = Agent(state_dim=6*84*84, action_dim=env.action_space.n, save_dir=save_dir, checkpoint=checkpoint)
@@ -46,7 +46,7 @@ for e in range(episodes):
         action = agent.act(state[0])
 
         next_state, reward, done, truncated, info = env.step(action)
-        vid.capture_frame()
+        # vid.capture_frame()
         q, loss = agent.learn(state=state[0], next_state=next_state, action=action, reward=reward)
 
         logger.log_step(reward, loss, q.cpu().detach().numpy())
@@ -62,4 +62,4 @@ for e in range(episodes):
             epsilon=agent.exploration_rate,
             step=agent.curr_step
         )
-vid.close()
+# vid.close()
