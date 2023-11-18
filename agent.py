@@ -28,7 +28,7 @@ class Agent:
         c, h, w = self.state_dim
         print(f'state_dim(in) {self.state_dim}')
         print(f'action_dim(out) {self.action_dim}')
-        self.q_network = QNetwork((c, h), self.action_dim).cuda()
+        self.q_network = QNetwork(c, self.action_dim).cuda()
         if self.use_cuda:
             self.q_network = self.q_network.to(device='cuda')
 
