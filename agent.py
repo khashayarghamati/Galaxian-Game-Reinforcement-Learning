@@ -96,7 +96,7 @@ class Agent:
         save_path = self.save_dir / f"agent_net_{int(self.curr_step // self.save_every)}.chkpt"
         torch.save(
             dict(
-                model=self.net.state_dict(),
+                model=self.q_network.state_dict(),
                 exploration_rate=self.exploration_rate
             ),
             save_path
