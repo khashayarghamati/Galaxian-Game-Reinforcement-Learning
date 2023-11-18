@@ -5,7 +5,7 @@ dependencies:
   - pip=23.3
   - python=3.11.5
   - pip:
-      - torch
+      - torch==1.9.1
       - neptune
       - gymnasium[atari,accept-rom-license]
 prefix: /opt/miniconda3/envs/gal3
