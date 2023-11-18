@@ -35,7 +35,7 @@ episodes = 1000
 for e in range(episodes):
 
     state = env.reset()
-    print(f'act space {state.action_space}')
+    print(f'act space {state}')
     # Play the game!
     while True:
         action = agent.act(state[0])
