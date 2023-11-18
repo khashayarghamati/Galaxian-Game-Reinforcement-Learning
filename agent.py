@@ -75,7 +75,8 @@ class Agent:
         return loss.item(), target_q_value
 
     def learn(self, state, next_state, action, reward):
-
+        state = torch.from_numpy(state).float()
+        next_state = torch.from_numpy(next_state).float()
         if self.curr_step % self.save_every == 0:
             self.save()
 
