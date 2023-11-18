@@ -47,8 +47,8 @@ class Agent:
             state = state.unsqueeze(0)
             action_values = self.q_network(state)
             print(f'action_values {torch.argmax(action_values)}')
-            print(f'action_values axis2 {torch.argmax(action_values, axis=2)}')
-            action_idx = torch.argmax(action_values, axis=1).item()
+            # print(f'action_values axis2 {torch.argmax(action_values, axis=2)}')
+            action_idx = torch.argmax(action_values)#torch.argmax(action_values, axis=1).item()
 
         # decrease exploration_rate
         self.exploration_rate *= self.exploration_rate_decay
