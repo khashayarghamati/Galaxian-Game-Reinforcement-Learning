@@ -56,17 +56,18 @@ class Agent:
         self.curr_step += 1
         return action_idx
 
+    def state_to_tensor(self, state):
+        return torch.FloatTensor(state).cuda()
+
     def update_Q_online(self, state_tensor, action, reward, next_state_tensor):
         self.optimizer.zero_grad()
 
-        state_tensor = torch.FloatTensor(state_tensor).cuda() if self.use_cuda else torch.FloatTensor(state_tensor)
-        state_tensor = state_tensor.unsqueeze(0)
+        state_tensor = self.state_to_tensor(state_tensor)
 
         q_values = self.q_network(state_tensor)
         q_value = q_values[action]
 
-        next_state_tensor = torch.FloatTensor(next_state_tensor).cuda() if self.use_cuda else torch.FloatTensor(next_state_tensor)
-        next_state_tensor = next_state_tensor.unsqueeze(0)
+        next_state_tensor = self.state_to_tensor(next_state_tensor)
 
         target_q_value = reward + self.discount_factor * torch.max(self.q_network(next_state_tensor))
         loss = torch.nn.MSELoss()(q_value, target_q_value.detach())
