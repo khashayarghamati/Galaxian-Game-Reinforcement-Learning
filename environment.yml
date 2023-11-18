@@ -9,4 +9,5 @@ dependencies:
       - neptune
       - gymnasium[atari,accept-rom-license]
       - matplotlib==3.4.3
+      - opencv-python==4.5.3.56
 prefix: /opt/miniconda3/envs/gal3
