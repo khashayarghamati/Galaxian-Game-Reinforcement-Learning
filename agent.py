@@ -60,7 +60,7 @@ class Agent:
     def update_Q_online(self, state_tensor, action, reward, next_state_tensor):
         self.optimizer.zero_grad()
 
-        state_tensor = self.to_tensor(np.reshape(state_tensor, [1, self.state_dim]))
+        # state_tensor = self.to_tensor(np.reshape(state_tensor, [1, self.state_dim]))
 
         q_values = self.q_network(state_tensor)
 
