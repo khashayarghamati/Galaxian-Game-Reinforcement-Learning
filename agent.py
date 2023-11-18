@@ -26,8 +26,9 @@ class Agent:
 
         self.use_cuda = torch.cuda.is_available()
         c, h, w = self.state_dim
-        print(f'shape {self.state_dim}')
-        self.q_network = QNetwork(c, self.action_dim).cuda()
+        print(f'state_dim {self.state_dim}')
+        print(f'action_dim {self.action_dim}')
+        self.q_network = QNetwork(self.action_dim, c).cuda()
         if self.use_cuda:
             self.q_network = self.q_network.to(device='cuda')
 
