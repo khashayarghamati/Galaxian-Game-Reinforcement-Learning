@@ -20,7 +20,7 @@ env = FrameStack(env, num_stack=6)
 
 env.reset()
 
-print(f'act space {env.action_space}')
+
 
 save_dir = Path('checkpoints') / datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%S')
 save_dir.mkdir(parents=True)
@@ -35,7 +35,7 @@ episodes = 1000
 for e in range(episodes):
 
     state = env.reset()
-
+    print(f'act space {state.action_space}')
     # Play the game!
     while True:
         action = agent.act(state[0])
