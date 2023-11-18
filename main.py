@@ -19,11 +19,7 @@ env = ResizeObservation(env, shape=84)
 env = TransformObservation(env, f=lambda x: x / 255.)
 env = FrameStack(env, num_stack=6)
 
-
-
 env.reset()
-
-
 
 save_dir = Path('checkpoints') / datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%S')
 save_dir.mkdir(parents=True)
@@ -46,7 +42,7 @@ for e in range(episodes):
         action = agent.act(state[0])
 
         next_state, reward, done, truncated, info = env.step(action)
-        vid.capture_frame()
+        # vid.capture_frame()
         q, loss = agent.learn(state=state[0], next_state=next_state, action=action, reward=reward)
 
         logger.log_step(reward, loss, q.cpu().detach().numpy())
@@ -62,4 +58,4 @@ for e in range(episodes):
             epsilon=agent.exploration_rate,
             step=agent.curr_step
         )
-vid.close()
+# vid.close()
