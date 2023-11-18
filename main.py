@@ -28,7 +28,7 @@ env.reset()
 save_dir = Path('checkpoints') / datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%S')
 save_dir.mkdir(parents=True)
 
-vid = VideoRecorder(env=env, path=save_dir/"vid.mp4")
+vid = VideoRecorder(env=env, path="vid.mp4")
 
 checkpoint = None
 agent = Agent(state_dim=6*84*84, action_dim=env.action_space.n, save_dir=save_dir, checkpoint=checkpoint)
@@ -62,3 +62,4 @@ for e in range(episodes):
             epsilon=agent.exploration_rate,
             step=agent.curr_step
         )
+vid.close()
