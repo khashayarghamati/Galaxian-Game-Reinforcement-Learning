@@ -57,7 +57,7 @@ class Agent:
         return action_idx
 
     def state_to_tensor(self, state):
-        print(f'\n {state}')
+
         return torch.FloatTensor(state).cuda()
 
     def update_Q_online(self, state_tensor, action, reward, next_state_tensor):
@@ -66,6 +66,8 @@ class Agent:
         state_tensor = self.state_to_tensor(state_tensor)
 
         q_values = self.q_network(state_tensor)
+        print(f'action {action}')
+        print(f'q_values {q_values}')
         q_value = q_values[action]
 
         next_state_tensor = self.state_to_tensor(next_state_tensor)
