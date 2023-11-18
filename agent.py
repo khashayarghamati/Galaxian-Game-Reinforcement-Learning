@@ -48,8 +48,8 @@ class Agent:
             action_values = self.q_network(state)
             print(f'action_values1 {action_values.shape}')
             print(f'action_values {action_values}')
-            print(f'action_values axis1 {torch.argmax(action_values, axis=0)}')
-            print(f'action_value  {(torch.argmax(action_values, axis=0)[0][0]).item()}')
+            print(f'action_values axis1 {torch.argmax(action_values, axis=1)}')
+            # print(f'action_value  {(torch.argmax(action_values, axis=0)[0][0]).item()}')
 
 
             # print(f'action_values axis4 {torch.argmax(action_values, axis=4)}')
