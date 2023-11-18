@@ -41,7 +41,7 @@ for e in range(episodes):
         next_state, reward, done, truncated, info = env.step(action)
         q, loss = agent.learn(state=state[0], next_state=next_state, action=action, reward=reward)
 
-        logger.log_step(reward, loss, q.cpu())
+        logger.log_step(reward, loss, q.tensor.detach().numpy())
 
         if done or truncated:
             break
