@@ -39,8 +39,9 @@ for e in range(episodes):
         action = agent.act(state)
 
         next_state, reward, done, truncated, info = env.step(action)
-        print(f'\nLOG:{state}')
-        q, loss = agent.learn(state=state, next_state=next_state, action=action, reward=reward)
+        print(f'\nLOG:{state[0]}')
+        print(f'\nLOG 1:{next_state}')
+        q, loss = agent.learn(state=state[0], next_state=next_state, action=action, reward=reward)
 
         logger.log_step(reward, loss, q)
 
