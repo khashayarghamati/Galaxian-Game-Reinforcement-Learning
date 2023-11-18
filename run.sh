@@ -2,7 +2,7 @@
 #PBS -N GALRL
 #PBS -m abe
 #PBS -l walltime=24:00:00
-#PBS -l nodes=1:ppn=20
+#PBS -l nodes=2:ppn=16
 #PBS -k oe
 #PBS -l pmem=1gb
 #PBS -q gpu
