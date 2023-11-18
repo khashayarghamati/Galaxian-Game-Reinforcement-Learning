@@ -64,8 +64,8 @@ class Agent:
 
         q_values = self.q_network(state_tensor)
         print(f'vvv {q_values}  act {action}')
-        q_value = q_values[action]
-
+        q_value = q_values[0][action]
+        print(f'q_value {q_value} ')
         next_state_tensor = self.to_tensor(np.reshape(next_state_tensor, [1, self.state_dim]))
 
         target_q_value = reward + self.discount_factor * torch.max(self.q_network(next_state_tensor))
