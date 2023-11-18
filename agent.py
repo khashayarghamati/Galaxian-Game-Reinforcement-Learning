@@ -42,7 +42,7 @@ class Agent:
 
         # EXPLOIT
         else:
-            state = self.to_tensor(state)
+            state = self.to_tensor(np.reshape(state, [1, self.state_dim]))
             action_values = self.q_network(state)
             action_idx = torch.argmax(action_values).item()
 
