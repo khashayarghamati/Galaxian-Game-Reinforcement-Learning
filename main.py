@@ -16,7 +16,7 @@ env = gym.make('ALE/Galaxian-v5')
 env = GrayScaleObservation(env, keep_dim=False)
 env = ResizeObservation(env, shape=84)
 env = TransformObservation(env, f=lambda x: x / 255.)
-env = FrameStack(env, num_stack=4)
+env = FrameStack(env, num_stack=6)
 
 env.reset()
 
