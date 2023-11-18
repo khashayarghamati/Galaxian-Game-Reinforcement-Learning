@@ -47,12 +47,12 @@ class Agent:
             state = state.unsqueeze(0)
             action_values = self.q_network(state)
             print(f'action_values1 {action_values.shape}')
-            print(f'action_values axis1 {torch.argmax(action_values, axis=0)[0]}')
-            print(f'action_value  {(torch.argmax(action_values, axis=0)[0]).item()}')
+            print(f'action_values axis1 {torch.argmax(action_values, axis=1)[0]}')
+            print(f'action_value  {(torch.argmax(action_values, axis=1)[0]).item()}')
 
 
             # print(f'action_values axis4 {torch.argmax(action_values, axis=4)}')
-            action_idx = (torch.argmax(action_values, axis=0)[0]).item()
+            action_idx = (torch.argmax(action_values, axis=1)[0]).item()
 
         # decrease exploration_rate
         self.exploration_rate *= self.exploration_rate_decay
