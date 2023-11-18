@@ -11,7 +11,7 @@ from gymnasium.wrappers.monitoring.video_recorder import VideoRecorder
 from agent import Agent
 from metrics import MetricLogger
 
-env = gym.make('ALE/Galaxian-v5')
+env = gym.make('ALE/Galaxian-v5',  render_mode='rgb_array')
 
 # env = SkipFrame(env, skip=4)
 env = GrayScaleObservation(env, keep_dim=False)
