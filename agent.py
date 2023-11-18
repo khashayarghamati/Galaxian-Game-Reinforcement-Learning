@@ -21,7 +21,7 @@ class Agent:
 
         self.curr_step = 0
 
-        self.save_every = 22000 if checkpoint else 5e5
+        self.save_every = 5e5
         self.save_dir = save_dir
 
         self.use_cuda = torch.cuda.is_available()

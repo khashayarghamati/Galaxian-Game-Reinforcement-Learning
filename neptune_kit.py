@@ -1,4 +1,7 @@
+import os
+
 import neptune
+from dotenv import load_dotenv
 
 
 class Neptune:
@@ -8,9 +11,10 @@ class Neptune:
         return cls.instance
 
     def init(self):
+        load_dotenv()
         self.run = neptune.init_run(
-            project="khashayar/Gal",
-            api_token="eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiI2YzhjYmU2Zi03ODBjLTQ4YjEtODAzMy1lOTJhN2Q1YWU1YjUifQ==",
+            project=os.getenv("NEPTUNE_PROJECT"),
+            api_token=os.getenv("NEPTUNE_API_TOKEN"),
         )
         print("Neptune initialized")
 

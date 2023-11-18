@@ -1,4 +1,4 @@
-name: gal
+name: gal3
 channels:
   - defaults
 dependencies:
@@ -11,4 +11,5 @@ dependencies:
       - matplotlib==3.4.3
       - opencv-python==4.5.3.56
       - moviepy
-prefix: /opt/miniconda3/envs/gal
+      - python-dotenv
+prefix: /opt/miniconda3/envs/gal3
