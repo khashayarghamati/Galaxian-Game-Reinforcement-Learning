@@ -16,11 +16,11 @@ env = gym.make('ALE/Galaxian-v5')
 env = GrayScaleObservation(env, keep_dim=False)
 env = ResizeObservation(env, shape=84)
 env = TransformObservation(env, f=lambda x: x / 255.)
-env = FrameStack(env, num_stack=6)
+# env = FrameStack(env, numpyΩm_stack=6)
 
 env.reset()
 
-
+print(f'act {env.action_space.n}')
 
 save_dir = Path('checkpoints') / datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%S')
 save_dir.mkdir(parents=True)
