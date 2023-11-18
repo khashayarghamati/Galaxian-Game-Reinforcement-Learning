@@ -69,7 +69,7 @@ class Agent:
 
         q_values = self.q_network(state_tensor)
         print(f'action {action}')
-        print(f'q_values {q_values}')
+        print(f'q_values {q_values.shape}')
         q_value = q_values[action]
 
         next_state_tensor = self.state_to_tensor(next_state_tensor)
