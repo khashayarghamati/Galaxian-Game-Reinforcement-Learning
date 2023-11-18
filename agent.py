@@ -49,7 +49,7 @@ class Agent:
             # print(f'action_values1 {action_values.shape}')
             print(f'action_values2 {(torch.argmax(action_values, axis=1)[0][0][0]).item()}')
             # print(f'action_values axis2 {torch.argmax(action_values, axis=2).item()}')
-            action_idx = (torch.argmax(action_values, axis=2)[0][0][0]).item()
+            action_idx = (torch.argmax(action_values, axis=1)[0][0][0]).item()
 
         # decrease exploration_rate
         self.exploration_rate *= self.exploration_rate_decay
