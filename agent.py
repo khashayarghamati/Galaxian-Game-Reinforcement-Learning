@@ -17,7 +17,7 @@ class Agent:
         self.exploration_rate_decay = 0.99999975
         self.exploration_rate_min = 0.1
 
-        self.discount_factor = 0.9
+        self.discount_factor = 0.99
 
         self.curr_step = 0
 
@@ -26,11 +26,11 @@ class Agent:
 
         self.use_cuda = torch.cuda.is_available()
         c, h, w = self.state_dim
-        self.q_network = QNetwork(h, self.action_dim).cuda()
+        self.q_network = QNetwork(c, self.action_dim).cuda()
         if self.use_cuda:
             self.q_network = self.q_network.to(device='cuda')
 
-        self.optimizer = optim.SGD(self.q_network.parameters(), lr=0.1)
+        self.optimizer = optim.Adam(self.q_network.parameters(), lr=0.001)
 
         if checkpoint:
             self.load(checkpoint)
@@ -43,17 +43,9 @@ class Agent:
 
         # EXPLOIT
         else:
-            state = torch.FloatTensor(state).cuda() if self.use_cuda else torch.FloatTensor(state)
-            state = state.unsqueeze(0)
+            state = self.to_tensor(np.reshape(state, [1, self.state_dim.shape[0]]))
             action_values = self.q_network(state)
-            print(f'action_values1 {action_values.shape}')
-            # print(f'action_values {action_values}')
-            print(f'action_values axis1 {torch.argmax(action_values, axis=3)}')
-            # print(f'action_value  {(torch.argmax(action_values, axis=0)[0][0]).item()}')
-
-
-            # print(f'action_values axis4 {torch.argmax(action_values, axis=4)}')
-            action_idx = 0
+            action_idx = torch.argmax(action_values).item()
 
         # decrease exploration_rate
         self.exploration_rate *= self.exploration_rate_decay
@@ -63,20 +55,19 @@ class Agent:
         self.curr_step += 1
         return action_idx
 
-    def state_to_tensor(self, state):
-
-        return torch.FloatTensor(state).cuda()
+    def to_tensor(self, numpy_array):
+        return torch.from_numpy(numpy_array).float()
 
     def update_Q_online(self, state_tensor, action, reward, next_state_tensor):
         self.optimizer.zero_grad()
 
-        state_tensor = self.state_to_tensor(state_tensor)
+        state_tensor = self.to_tensor(np.reshape(state_tensor, [1, self.state_dim.shape[0]]))
 
         q_values = self.q_network(state_tensor)
 
         q_value = q_values[action]
 
-        next_state_tensor = self.state_to_tensor(next_state_tensor)
+        next_state_tensor = self.to_tensor(next_state_tensor)
 
         target_q_value = reward + self.discount_factor * torch.max(self.q_network(next_state_tensor))
         loss = torch.nn.MSELoss()(q_value, target_q_value.detach())
