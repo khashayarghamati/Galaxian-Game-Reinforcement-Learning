@@ -63,7 +63,7 @@ class Agent:
         state_tensor = self.to_tensor(np.reshape(state_tensor, [1, self.state_dim]))
 
         q_values = self.q_network(state_tensor)
-
+        print(f'vvv {q_values}')
         q_value = q_values[action]
 
         next_state_tensor = self.to_tensor(np.reshape(next_state_tensor, [1, self.state_dim]))
