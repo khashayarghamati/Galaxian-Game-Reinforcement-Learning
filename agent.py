@@ -46,7 +46,7 @@ class Agent:
             state = torch.FloatTensor(state).cuda() if self.use_cuda else torch.FloatTensor(state)
             state = state.unsqueeze(0)
             action_values = self.q_network(state)
-            print(f'action_values {action_values}')
+            print(f'action_values {action_values.shape}')
             action_idx = torch.argmax(action_values).item()
 
         # decrease exploration_rate
