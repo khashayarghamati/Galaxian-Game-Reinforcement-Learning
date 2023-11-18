@@ -36,7 +36,7 @@ for e in range(episodes):
 
     # Play the game!
     while True:
-        action = agent.act(state)
+        action = agent.act(state[0])
 
         next_state, reward, done, truncated, info = env.step(action)
         q, loss = agent.learn(state=state[0], next_state=next_state, action=action, reward=reward)
