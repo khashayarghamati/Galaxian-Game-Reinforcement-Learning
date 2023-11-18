@@ -1,14 +1,11 @@
-name: gal
+name: gal3
 channels:
   - defaults
 dependencies:
-  - pip=20.0.2=py38_3
-  - python=3.8.3
-  - readline=8.0
-  - setuptools=46.4.0=py38_0
-  - wheel=0.34.2=py38_0
+  - pip=23.3
+  - python=3.11.5
   - pip:
       - torch
       - neptune
       - gymnasium[atari,accept-rom-license]
-prefix: /opt/miniconda3/envs/gal
+prefix: /opt/miniconda3/envs/gal3
