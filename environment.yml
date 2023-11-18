@@ -2,10 +2,10 @@ name: gal3
 channels:
   - defaults
 dependencies:
-  - pip=23.3
-  - python=3.11.5
+  - pip=21.2.4
+  - python=3.9
   - pip:
-      - torch==1.13.0
+      - torch==1.9.0
       - neptune
       - gymnasium[atari,accept-rom-license]
 prefix: /opt/miniconda3/envs/gal3
