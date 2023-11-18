@@ -47,7 +47,7 @@ class Agent:
             state = state.unsqueeze(0)
             action_values = self.q_network(state)
             print(f'action_values1 {action_values.shape}')
-            print(f'action_values2 {torch.argmax(action_values, axis=2)}')
+            print(f'action_values2 {torch.argmax(action_values, axis=2)[0]}')
             print(f'action_values axis2 {torch.argmax(action_values, axis=2).item()}')
             action_idx = torch.argmax(action_values, axis=2).item()
 
