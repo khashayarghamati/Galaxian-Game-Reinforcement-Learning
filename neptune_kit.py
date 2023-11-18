@@ -14,7 +14,7 @@ class Neptune:
         load_dotenv()
         self.run = neptune.init_run(
             project=os.getenv("NEPTUNE_PROJECT"),
-            api_token=os.getenv("NEPTUNE_API_TOKEN"),
+            api_token=os.getenv("NEPTUNE_TOKEN"),
         )
         print("Neptune initialized")
 
