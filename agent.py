@@ -21,13 +21,16 @@ class Agent:
 
         self.curr_step = 0
 
-        self.save_every = 22000
+        self.save_every = 22000 if checkpoint else 5e5
         self.save_dir = save_dir
 
         self.use_cuda = torch.cuda.is_available()
-        self.q_network = QNetwork(self.state_dim, self.action_dim).cuda()
+
         if self.use_cuda:
+            self.q_network = QNetwork(self.state_dim, self.action_dim).cuda()
             self.q_network = self.q_network.to(device='cuda')
+        else:
+            self.q_network = QNetwork(self.state_dim, self.action_dim)
 
         self.optimizer = optim.Adam(self.q_network.parameters(), lr=0.001)
 
@@ -55,7 +58,9 @@ class Agent:
         return action_idx
 
     def to_tensor(self, state):
-        return torch.FloatTensor(state).cuda()
+        if self.use_cuda:
+            return torch.FloatTensor(state).cuda()
+        return torch.FloatTensor(state)
 
     def update_Q_online(self, state_tensor, action, reward, next_state_tensor):
         self.optimizer.zero_grad()
@@ -63,9 +68,7 @@ class Agent:
         state_tensor = self.to_tensor(np.reshape(state_tensor, [1, self.state_dim]))
 
         q_values = self.q_network(state_tensor)
-        print(f'vvv {q_values}  act {action}')
         q_value = q_values[0][action]
-        print(f'q_value {q_value} ')
         next_state_tensor = self.to_tensor(np.reshape(next_state_tensor, [1, self.state_dim]))
 
         target_q_value = reward + self.discount_factor * torch.max(self.q_network(next_state_tensor))
@@ -84,6 +87,7 @@ class Agent:
 
     def save(self):
         save_path = self.save_dir / f"agent_net_{int(self.curr_step // self.save_every)}.chkpt"
+
         torch.save(
             dict(
                 model=self.q_network.state_dict(),
