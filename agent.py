@@ -25,7 +25,8 @@ class Agent:
         self.save_dir = save_dir
 
         self.use_cuda = torch.cuda.is_available()
-        self.q_network = QNetwork(self.state_dim, self.action_dim).cuda()
+        c, h, w = self.state_dim
+        self.q_network = QNetwork(c, self.action_dim).cuda()
         if self.use_cuda:
             self.q_network = self.q_network.to(device='cuda')
 
