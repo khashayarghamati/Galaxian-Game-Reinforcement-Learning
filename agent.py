@@ -24,7 +24,7 @@ class Agent:
         self.save_every = 5e5
         self.save_dir = save_dir
 
-        self.q_selection = None
+        self.q_selection = torch.zeros((self.state_dim, 24))
 
         self.use_cuda = torch.cuda.is_available()
 
