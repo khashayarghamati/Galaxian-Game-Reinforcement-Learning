@@ -49,7 +49,7 @@ for e in range(episodes):
         # vid.capture_frame()
         q, loss = agent.learn(state=state[0], next_state=next_state, action=action, reward=reward)
 
-        logger.log_step(reward, loss, q.cpu().detach().numpy())
+        logger.log_step(reward, loss, q.numpy())
 
         if done or truncated:
             break
