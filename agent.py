@@ -17,12 +17,14 @@ class Agent:
         self.exploration_rate_decay = 0.99999975
         self.exploration_rate_min = 0.1
 
-        self.discount_factor = 0.5
+        self.discount_factor = 0.99
 
         self.curr_step = 0
 
         self.save_every = 5e5
         self.save_dir = save_dir
+
+        self.q_selection = None
 
         self.use_cuda = torch.cuda.is_available()
 
@@ -46,8 +48,8 @@ class Agent:
         # EXPLOIT
         else:
             state = self.to_tensor(np.reshape(state, [1, self.state_dim]))
-            action_values = self.q_network(state)
-            action_idx = torch.argmax(action_values).item()
+            self.q_selection, _ = self.q_network(state)
+            action_idx = torch.argmax(self.q_selection).item()
 
         # decrease exploration_rate
         self.exploration_rate *= self.exploration_rate_decay
@@ -63,19 +65,23 @@ class Agent:
         return torch.FloatTensor(state)
 
     def update_Q_online(self, state_tensor, action, reward, next_state_tensor):
-        self.optimizer.zero_grad()
 
+        next_state = self.to_tensor(np.reshape(next_state_tensor, [1, self.state_dim]))
         state_tensor = self.to_tensor(np.reshape(state_tensor, [1, self.state_dim]))
 
-        q_values = self.q_network(state_tensor)
-        q_value = q_values[0][action]
-        next_state_tensor = self.to_tensor(np.reshape(next_state_tensor, [1, self.state_dim]))
+        # Update Q-values using the Double Q-learning update rule
+        _, q_evaluation = self.q_network(next_state)
+        target = reward + self.discount_factor * q_evaluation[0][torch.argmax(self.q_selection).item()].item()
+        q_selection, _ = self.q_network(state_tensor)
+        q_selection[0][action] = target
 
-        target_q_value = reward + self.discount_factor * torch.max(self.q_network(next_state_tensor))
-        loss = torch.nn.MSELoss()(q_value, target_q_value.detach())
+        # Compute the loss and perform a gradient descent step
+        loss = torch.nn.MSELoss()(q_selection, q_evaluation)
+        self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
-        return loss.item(), target_q_value
+
+        return loss.item(), target
 
     def learn(self, state, next_state, action, reward):
         if self.curr_step % self.save_every == 0:
