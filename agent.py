@@ -17,7 +17,7 @@ class Agent:
         self.exploration_rate_decay = 0.99999975
         self.exploration_rate_min = 0.1
 
-        self.discount_factor = 0.99
+        self.discount_factor = 0.5
 
         self.curr_step = 0
 
