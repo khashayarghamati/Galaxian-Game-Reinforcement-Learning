@@ -85,8 +85,7 @@ class Agent:
         target = reward + self.discount_factor * next_states_target_q_value * (1 - done.float())
 
         # q_value[0][action] = target
-        print(f'Action {q_value}')
-        selected_q_value = q_value[action]
+        selected_q_value = q_value[0][action]
 
         # Compute the loss and perform a gradient descent step
         loss = torch.nn.MSELoss()(selected_q_value, target)
