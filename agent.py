@@ -81,8 +81,8 @@ class Agent:
         q_value = self.q_network(state)
         q_evaluation = self.q_network(next_state)
         next_states_target_q_value = q_evaluation.gather(1, q_value.max(1)[1].unsqueeze(1)).squeeze(1)
-
-        target = reward + self.discount_factor * next_states_target_q_value * (1 - done)
+        print(done.float())
+        target = reward + self.discount_factor * next_states_target_q_value * (1 - done.float())
 
         selected_q_value = q_value.gather(1, action.unsqueeze(1)).squeeze(1)
 
@@ -100,6 +100,7 @@ class Agent:
             self.save()
 
         state, next_state, action, reward, done = self.recall()
+
 
         # Backpropagate loss through Q_online
         loss, q = self.update_Q_online(state=state, action=action, reward=reward,
