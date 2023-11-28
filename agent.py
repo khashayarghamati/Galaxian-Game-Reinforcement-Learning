@@ -3,6 +3,9 @@ import torch
 from pathlib import Path
 
 from collections import deque
+
+from Model import Model
+from config import Config
 from neptune_kit import Neptune
 from q_network import QNetwork
 import torch.optim as optim
@@ -13,15 +16,15 @@ class Agent:
         self.state_dim = state_dim
         self.action_dim = action_dim
 
-        self.exploration_rate = 1
-        self.exploration_rate_decay = 0.99999975
-        self.exploration_rate_min = 0.1
+        self.exploration_rate = Config.exploration_rate
+        self.exploration_rate_decay = Config.exploration_rate_decay
+        self.exploration_rate_min = Config.exploration_rate_min
 
-        self.discount_factor = 0.99
+        self.discount_factor = Config.discount_factor
 
         self.curr_step = 0
 
-        self.save_every = 5e5
+        self.save_every = Config.save_every
         self.save_dir = save_dir
 
         self.q_selection = torch.zeros((self.state_dim, 24))
@@ -29,12 +32,12 @@ class Agent:
         self.use_cuda = torch.cuda.is_available()
 
         if self.use_cuda:
-            self.q_network = QNetwork(self.state_dim, self.action_dim).cuda()
+            self.q_network = Model(self.state_dim, self.action_dim).cuda()
             self.q_network = self.q_network.to(device='cuda')
         else:
             self.q_network = QNetwork(self.state_dim, self.action_dim)
 
-        self.optimizer = optim.Adam(self.q_network.parameters(), lr=0.001)
+        self.optimizer = optim.Adam(self.q_network.parameters(), lr=Config.lr)
 
         if checkpoint:
             self.load(checkpoint)
@@ -48,7 +51,7 @@ class Agent:
         # EXPLOIT
         else:
             state = self.to_tensor(np.reshape(state, [1, self.state_dim]))
-            self.q_selection, _ = self.q_network(state)
+            self.q_selection = self.q_network(state)
             action_idx = torch.argmax(self.q_selection).item()
 
         # decrease exploration_rate
@@ -70,7 +73,7 @@ class Agent:
         state_tensor = self.to_tensor(np.reshape(state_tensor, [1, self.state_dim]))
 
         # Update Q-values using the Double Q-learning update rule
-        _, q_evaluation = self.q_network(next_state)
+        q_evaluation = self.q_network(next_state)
         target = reward + self.discount_factor * q_evaluation[0][torch.argmax(self.q_selection).item()].item()
         q_selection, _ = self.q_network(state_tensor)
         q_selection[0][action] = target
