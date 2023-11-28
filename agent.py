@@ -52,8 +52,8 @@ class Agent:
         # EXPLOIT
         else:
             state = torch.tensor(state, dtype=torch.float, device='cuda').unsqueeze(0)
-            self.q_value = self.q_network(state)
-            action_idx = torch.argmax(self.q_value).item()
+            q_value = self.q_network(state)
+            action_idx = torch.argmax(q_value).item()
 
         # decrease exploration_rate
         self.exploration_rate *= self.exploration_rate_decay
@@ -78,14 +78,13 @@ class Agent:
         state = torch.tensor(state, dtype=torch.float, device='cuda')
         next_state = torch.tensor(next_state_tensor, dtype=torch.float, device='cuda')
 
+        q_value = self.q_network(state)
         q_evaluation = self.q_network(next_state)
-        next_states_target_q_value = q_evaluation.gather(1, self.q_value.max(1)[1].unsqueeze(1)).squeeze(1)
+        next_states_target_q_value = q_evaluation.gather(1, q_value.max(1)[1].unsqueeze(1)).squeeze(1)
 
         target = reward + self.discount_factor * next_states_target_q_value * (1 - done)
 
-        self.q_value = self.q_network(state)
-
-        selected_q_value = self.q_value.gather(1, action.unsqueeze(1)).squeeze(1)
+        selected_q_value = q_value.gather(1, action.unsqueeze(1)).squeeze(1)
 
         # Compute the loss and perform a gradient descent step
         loss = torch.nn.MSELoss()(selected_q_value, q_evaluation)
