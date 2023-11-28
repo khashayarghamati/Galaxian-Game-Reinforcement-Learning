@@ -12,7 +12,7 @@ from agent import Agent
 from config import Config
 from metrics import MetricLogger
 
-env = gym.make('ALE/Galaxian-v5',  render_mode='rgb')
+env = gym.make('ALE/Galaxian-v5',  render_mode='rgb_array')
 
 # env = SkipFrame(env, skip=4)
 env = GrayScaleObservation(env, keep_dim=False)
