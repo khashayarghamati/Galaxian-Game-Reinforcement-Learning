@@ -93,7 +93,7 @@ class Agent:
         loss.backward()
         self.optimizer.step()
 
-        return loss.item(), target
+        return loss.item(), torch.max(target).item()
 
     def learn(self):
         if self.curr_step % self.save_every == 0:
