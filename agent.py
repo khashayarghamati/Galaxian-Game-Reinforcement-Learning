@@ -32,10 +32,10 @@ class Agent:
         self.use_cuda = torch.cuda.is_available()
 
         if self.use_cuda:
-            self.q_network = Model(self.state_dim, self.action_dim).float()
+            self.q_network = QNetwork(self.state_dim, self.action_dim).cuda()
             self.q_network = self.q_network.to(device='cuda')
         else:
-            self.q_network = QNetwork(self.state_dim, self.action_dim).float()
+            self.q_network = QNetwork(self.state_dim, self.action_dim)
 
         self.optimizer = optim.Adam(self.q_network.parameters(), lr=Config.lr)
 
@@ -50,9 +50,8 @@ class Agent:
 
         # EXPLOIT
         else:
-            # state = self.to_tensor(np.reshape(state, [1, self.state_dim]))
-            state = torch.FloatTensor(state).cuda()
-            self.q_selection = self.q_network(state, model='online')
+            state = self.to_tensor(np.reshape(state, [1, self.state_dim]))
+            self.q_selection, _ = self.q_network(state)
             action_idx = torch.argmax(self.q_selection).item()
 
         # decrease exploration_rate
@@ -68,18 +67,15 @@ class Agent:
             return torch.FloatTensor(state).cuda()
         return torch.FloatTensor(state)
 
-    def update_Q_online(self, state_tensor, action, reward, next_state):
+    def update_Q_online(self, state_tensor, action, reward, next_state_tensor):
 
-        # next_state = self.to_tensor(np.reshape(next_state, [1, self.state_dim]))
-        # state_tensor = self.to_tensor(np.reshape(state_tensor, [1, self.state_dim]))
-
-        next_state = torch.FloatTensor(next_state).cuda()
-        state_tensor = torch.FloatTensor(state_tensor).cuda()
+        next_state = self.to_tensor(np.reshape(next_state_tensor, [1, self.state_dim]))
+        state_tensor = self.to_tensor(np.reshape(state_tensor, [1, self.state_dim]))
 
         # Update Q-values using the Double Q-learning update rule
-        q_evaluation = self.q_network(next_state, model='target')
+        _, q_evaluation = self.q_network(next_state)
         target = reward + self.discount_factor * q_evaluation[0][torch.argmax(self.q_selection).item()].item()
-        q_selection, _ = self.q_network(state_tensor, model='online')
+        q_selection, _ = self.q_network(state_tensor)
         q_selection[0][action] = target
 
         # Compute the loss and perform a gradient descent step
@@ -95,7 +91,7 @@ class Agent:
             self.save()
 
         # Backpropagate loss through Q_online
-        loss, q = self.update_Q_online(state_tensor=state, action=action, reward=reward, next_state=next_state)
+        loss, q = self.update_Q_online(state_tensor=state, action=action, reward=reward, next_state_tensor=next_state)
         return q, loss
 
     def save(self):
