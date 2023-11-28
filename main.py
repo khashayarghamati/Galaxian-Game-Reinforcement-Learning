@@ -18,7 +18,7 @@ env = gym.make('ALE/Galaxian-v5',  render_mode='rgb_array')
 env = GrayScaleObservation(env, keep_dim=False)
 env = ResizeObservation(env, shape=84)
 env = TransformObservation(env, f=lambda x: x / 255.)
-env = FrameStack(env, num_stack=6)
+env = FrameStack(env, num_stack=4)
 
 
 
@@ -32,7 +32,7 @@ save_dir.mkdir(parents=True)
 # vid = VideoRecorder(env=env, path="vid.mp4")
 
 checkpoint = None
-agent = Agent(state_dim=6*84*84, action_dim=env.action_space.n, save_dir=save_dir, checkpoint=checkpoint)
+agent = Agent(state_dim=4*84*84, action_dim=env.action_space.n, save_dir=save_dir, checkpoint=checkpoint)
 
 logger = MetricLogger(save_dir)
 
@@ -42,14 +42,16 @@ for e in range(episodes):
 
     state = env.reset()
 
-    print(state[0].shape)
     # Play the game!
     while True:
         action = agent.act(state[0])
 
         next_state, reward, done, truncated, info = env.step(action)
+
+        agent.cache(state[0], next_state, action, reward, done)
+
         # vid.capture_frame()
-        q, loss = agent.learn(state=state[0], next_state=next_state, action=action, reward=reward)
+        q, loss = agent.learn()
 
         logger.log_step(reward, loss, q)
 

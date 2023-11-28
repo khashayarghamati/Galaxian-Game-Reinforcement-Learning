@@ -30,7 +30,7 @@ save_dir.mkdir(parents=True)
 vid = VideoRecorder(env=env, path="vid.mp4")
 
 checkpoint = Path('agent_net_21.chkpt')
-agent = Agent(state_dim=6*84*84, action_dim=env.action_space.n, save_dir=save_dir, checkpoint=checkpoint)
+agent = Agent(state_dim=4*84*84, action_dim=env.action_space.n, save_dir=save_dir, checkpoint=checkpoint)
 agent.exploration_rate = agent.exploration_rate_min
 
 logger = MetricLogger(save_dir)
