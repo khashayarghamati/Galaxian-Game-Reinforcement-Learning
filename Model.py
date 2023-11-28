@@ -22,11 +22,12 @@ class Model(torch.nn.Module):
         self.fc_z = nn.Linear(512, output_size)
 
     def forward(self, input):
-        out = nn.ReLU(self.conv1(input))
-        out = nn.ReLU(self.conv2(out))
-        out = nn.ReLU(self.conv3(out))
-        out = nn.Flatten(out)
+        input = nn.functional.relu(self.conv1(input))
+        input = nn.functional.relu(self.conv2(input))
+        input = nn.functional.relu(self.conv3(input))
 
-        out = nn.ReLU(self.fc_h(out))
-        out = self.fc_z(out)
-        return out
+        q = input.view(-1, 3136)
+
+        q = nn.functional.relu(self.fc_h(q))
+        q = self.fc_z(q)
+        return q
