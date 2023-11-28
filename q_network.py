@@ -9,6 +9,7 @@ class QNetwork(torch.nn.Module):
         self.fc3a = torch.nn.Linear(24, output_size)
         self.fc3b = torch.nn.Linear(24, output_size)
 
+
     def forward(self, x):
         x = torch.relu(self.fc1(x))
         x = torch.relu(self.fc2(x))

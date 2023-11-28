@@ -97,7 +97,6 @@ class Agent:
 
     def learn(self):
         if self.curr_step % self.save_every == 0:
-            self.sync_Q_target()
             self.save()
 
         state, next_state, action, reward, done = self.recall()
@@ -159,6 +158,3 @@ class Agent:
         batch = random.sample(self.memory, self.batch_size)
         state, next_state, action, reward, done = map(torch.stack, zip(*batch))
         return state, next_state, action.squeeze(), reward.squeeze(), done.squeeze()
-
-    def sync_Q_target(self):
-        self.q_network.target.load_state_dict(self.q_network.online.state_dict())
