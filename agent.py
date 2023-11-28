@@ -85,7 +85,7 @@ class Agent:
         target = reward + self.discount_factor * next_states_target_q_value * (1 - done.float())
 
         # q_selection[0][action] = target
-        print(action)
+        print(f'Action {action}')
         selected_q_value = q_value.gather(1, action).squeeze(1)
 
         # Compute the loss and perform a gradient descent step
@@ -157,7 +157,6 @@ class Agent:
         """
         Retrieve a batch of experiences from memory
         """
-        print(len(self.memory))
         batch = random.sample(self.memory, self.batch_size)
         state, next_state, action, reward, done = map(torch.stack, zip(*batch))
         return state, next_state, action.squeeze(), reward.squeeze(), done.squeeze()
