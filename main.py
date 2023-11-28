@@ -41,7 +41,7 @@ episodes = Config.total_episode
 for e in range(episodes):
 
     state = env.reset()
-    print(state.shape)
+
     print(state)
     # Play the game!
     while True:
