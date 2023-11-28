@@ -32,10 +32,10 @@ class Agent:
         self.use_cuda = torch.cuda.is_available()
 
         if self.use_cuda:
-            self.q_network = Model(self.state_dim, self.action_dim).cuda()
+            self.q_network = Model(self.state_dim, self.action_dim).float()
             self.q_network = self.q_network.to(device='cuda')
         else:
-            self.q_network = QNetwork(self.state_dim, self.action_dim)
+            self.q_network = QNetwork(self.state_dim, self.action_dim).float()
 
         self.optimizer = optim.Adam(self.q_network.parameters(), lr=Config.lr)
 
@@ -52,7 +52,7 @@ class Agent:
         else:
             # state = self.to_tensor(np.reshape(state, [1, self.state_dim]))
             state = torch.FloatTensor(state).cuda()
-            self.q_selection = self.q_network(state)
+            self.q_selection = self.q_network(state, model='online')
             action_idx = torch.argmax(self.q_selection).item()
 
         # decrease exploration_rate
@@ -77,9 +77,9 @@ class Agent:
         state_tensor = torch.FloatTensor(state_tensor).cuda()
 
         # Update Q-values using the Double Q-learning update rule
-        q_evaluation = self.q_network(next_state)
+        q_evaluation = self.q_network(next_state, model='target')
         target = reward + self.discount_factor * q_evaluation[0][torch.argmax(self.q_selection).item()].item()
-        q_selection, _ = self.q_network(state_tensor)
+        q_selection, _ = self.q_network(state_tensor, model='online')
         q_selection[0][action] = target
 
         # Compute the loss and perform a gradient descent step

@@ -1,28 +1,32 @@
-import torch
+import copy
 
+import torch
+from torch import nn
 
 class Model(torch.nn.Module):
     def __init__(self, input_size, output_size):
         super().__init__()
-        self.conv1 = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=input_size, out_channels=32, kernel_size=(8, 8), stride=4),
-            torch.nn.ReLU())
-        self.conv2 = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=32, out_channels=64, kernel_size=(4, 4), stride=2),
-            torch.nn.ReLU())
-        self.conv3 = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(3, 3), stride=1),
-            torch.nn.ReLU())
-        self.fc1 = torch.nn.Sequential(
-            torch.nn.Linear(in_features=7 * 7 * 64, out_features=256),
-            torch.nn.ReLU())
-        self.fc2 = torch.nn.Linear(in_features=256, out_features=output_size)
+        self.online = nn.Sequential(
+            nn.Conv2d(in_channels=input_size, out_channels=32, kernel_size=8, stride=4),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=4, stride=2),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1),
+            nn.ReLU(),
+            nn.Flatten(),
+            nn.Linear(3136, 512),
+            nn.ReLU(),
+            nn.Linear(512, output_size)
+        )
 
-    def forward(self, observation):
-        out1 = self.conv1(observation)
-        out2 = self.conv2(out1)
-        out3 = self.conv3(out2)
-        out4 = self.fc1(out3.view(-1, 7 * 7 * 64))
-        out = self.fc2(out4)
+        self.target = copy.deepcopy(self.online)
 
-        return out
+        # Q_target parameters are frozen.
+        for p in self.target.parameters():
+            p.requires_grad = False
+
+    def forward(self, input, model):
+        if model == 'online':
+            return self.online(input)
+        elif model == 'target':
+            return self.target(input)
