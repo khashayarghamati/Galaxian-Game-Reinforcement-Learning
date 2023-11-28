@@ -50,7 +50,7 @@ class Agent:
 
         # EXPLOIT
         else:
-            state = self.to_tensor(np.reshape(state, [1, self.state_dim]))
+            # state = self.to_tensor(np.reshape(state, [1, self.state_dim]))
             self.q_selection = self.q_network(state)
             action_idx = torch.argmax(self.q_selection).item()
 
@@ -67,10 +67,10 @@ class Agent:
             return torch.FloatTensor(state).cuda()
         return torch.FloatTensor(state)
 
-    def update_Q_online(self, state_tensor, action, reward, next_state_tensor):
+    def update_Q_online(self, state_tensor, action, reward, next_state):
 
-        next_state = self.to_tensor(np.reshape(next_state_tensor, [1, self.state_dim]))
-        state_tensor = self.to_tensor(np.reshape(state_tensor, [1, self.state_dim]))
+        # next_state = self.to_tensor(np.reshape(next_state, [1, self.state_dim]))
+        # state_tensor = self.to_tensor(np.reshape(state_tensor, [1, self.state_dim]))
 
         # Update Q-values using the Double Q-learning update rule
         q_evaluation = self.q_network(next_state)
