@@ -1,7 +1,7 @@
 import torch
 
 
-class Model:
+class Model(torch.nn.Module):
     def __init__(self, input_size, output_size):
         super().__init__()
         self.conv1 = torch.nn.Sequential(
