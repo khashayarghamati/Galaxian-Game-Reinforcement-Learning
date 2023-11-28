@@ -9,6 +9,7 @@ from gymnasium.wrappers import (FrameStack,
 from gymnasium.wrappers.monitoring.video_recorder import VideoRecorder
 
 from agent import Agent
+from config import Config
 from metrics import MetricLogger
 
 env = gym.make('ALE/Galaxian-v5',  render_mode='rgb_array')
@@ -35,7 +36,7 @@ agent = Agent(state_dim=6*84*84, action_dim=env.action_space.n, save_dir=save_di
 
 logger = MetricLogger(save_dir)
 
-episodes = 40000
+episodes = Config.total_episode
 
 for e in range(episodes):
 
