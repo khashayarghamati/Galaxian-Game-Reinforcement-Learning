@@ -9,7 +9,7 @@ class Config:
 
     save_every = 1e4
     reply_buffer_size = 50000
-    total_episode = 100000
+    total_episode = 40000
 
     update_target_frequency = 5
 
