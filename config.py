@@ -7,7 +7,7 @@ class Config:
     exploration_rate_min = 0.1
     discount_factor = 0.99
 
-    save_every = 1e4
+    save_every = 5e5
     reply_buffer_size = 50000
     total_episode = 40000
 
