@@ -42,7 +42,7 @@ for e in range(episodes):
 
     state = env.reset()
 
-    print(state)
+    print(state[0].shape)
     # Play the game!
     while True:
         action = agent.act(state[0])
