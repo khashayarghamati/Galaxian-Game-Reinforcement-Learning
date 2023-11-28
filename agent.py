@@ -28,7 +28,7 @@ class Agent:
         self.save_dir = save_dir
 
         self.memory = deque(maxlen=100000)
-        self.batch_size = 64
+        self.batch_size = 1
 
         self.use_cuda = torch.cuda.is_available()
 
