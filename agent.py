@@ -91,7 +91,7 @@ class Agent:
             self.save()
 
         # Backpropagate loss through Q_online
-        loss, q = self.update_Q_online(state_tensor=state, action=action, reward=reward, next_state_tensor=next_state)
+        loss, q = self.update_Q_online(state_tensor=state, action=action, reward=reward, next_state=next_state)
         return q, loss
 
     def save(self):
