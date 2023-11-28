@@ -12,7 +12,7 @@ from agent import Agent
 from config import Config
 from metrics import MetricLogger
 
-env = gym.make('ALE/Galaxian-v5',  render_mode='rgb_array')
+env = gym.make('ALE/Galaxian-v5',  render_mode='rgb')
 
 # env = SkipFrame(env, skip=4)
 env = GrayScaleObservation(env, keep_dim=False)
@@ -41,7 +41,8 @@ episodes = Config.total_episode
 for e in range(episodes):
 
     state = env.reset()
-
+    print(state.shape)
+    print(state)
     # Play the game!
     while True:
         action = agent.act(state[0])
