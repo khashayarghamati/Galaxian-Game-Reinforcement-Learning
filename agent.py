@@ -28,7 +28,7 @@ class Agent:
         self.save_dir = save_dir
 
         self.memory = deque(maxlen=Config.total_episode)
-        self.batch_size = 1
+        self.batch_size = 32
 
         self.use_cuda = torch.cuda.is_available()
 
@@ -155,7 +155,9 @@ class Agent:
         """
         Retrieve a batch of experiences from memory
         """
-        print(f'Memory size: {len(self.memory)}')
-        batch = random.sample(self.memory, self.batch_size)
+        if len(self.memory) > self.batch_size:
+            batch = random.sample(self.memory, self.batch_size)
+        else:
+            batch = random.sample(self.memory, 1)
         state, next_state, action, reward, done = map(torch.stack, zip(*batch))
         return state, next_state, action.squeeze(), reward.squeeze(), done.squeeze()
