@@ -8,3 +8,5 @@ class Config:
     discount_factor = 0.99
 
     save_every = 5e5 * 2
+    total_episode = 40000
+
