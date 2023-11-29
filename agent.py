@@ -27,8 +27,8 @@ class Agent:
         self.save_every = Config.save_every
         self.save_dir = save_dir
 
-        self.memory = deque(maxlen=100000)
-        self.batch_size = 32
+        self.memory = deque(maxlen=Config.total_episode)
+        self.batch_size = 1
 
         self.use_cuda = torch.cuda.is_available()
 
@@ -148,13 +148,14 @@ class Agent:
         reward = torch.DoubleTensor([reward]).cuda() if self.use_cuda else torch.DoubleTensor([reward])
         done = torch.BoolTensor([done]).cuda() if self.use_cuda else torch.BoolTensor([done])
 
-        self.memory.append( (state, next_state, action, reward, done,) )
+        self.memory.append((state, next_state, action, reward, done,))
 
 
     def recall(self):
         """
         Retrieve a batch of experiences from memory
         """
+        print(f'Memory size: {len(self.memory)}')
         batch = random.sample(self.memory, self.batch_size)
         state, next_state, action, reward, done = map(torch.stack, zip(*batch))
         return state, next_state, action.squeeze(), reward.squeeze(), done.squeeze()
