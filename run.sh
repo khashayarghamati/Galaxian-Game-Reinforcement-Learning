@@ -32,6 +32,6 @@ echo ------------------------------------------------------
 
 echo -n 'Running Model\n'
 
-python /home2/kg23aay/workspace/Galaxian-Game-Reinforcement-Learning/main.py
+python /home2/kg23aay/workspace/Galaxian-Game-Reinforcement-Learning/replay.py
 echo ------------------------------------------------------
 echo Job ends
