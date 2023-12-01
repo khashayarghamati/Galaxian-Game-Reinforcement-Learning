@@ -29,7 +29,7 @@ vid = VideoRecorder(env=env, path="DQN29.mp4")
 
 checkpoint = Path('agent_net_29.chkpt')
 agent = Agent(state_dim=(4, 84, 84), action_dim=env.action_space.n,
-              save_dir=save_dir, checkpoint=checkpoint, prefer_CPU=True)
+              save_dir=save_dir, checkpoint=checkpoint, prefer_CPU=False)
 agent.exploration_rate = agent.exploration_rate_min
 
 logger = MetricLogger(save_dir, "Replay")
