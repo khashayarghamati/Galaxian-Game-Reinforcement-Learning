@@ -122,8 +122,18 @@ class MetricLogger():
         #
         #     plt.clf()
 
-    def record_action_and_info(self, episode, step, action, info):
+    def record_action_and_info(self, episode, step, action, info, reward):
         Neptune().save_chart(f"Episode_{self.state}_step", episode)
         Neptune().save_chart(f"Step_{self.state}_step", step)
         Neptune().save_chart(f"Action {self.state}_step", action)
         Neptune().save_chart(f"Info {self.state}_step", info)
+        Neptune().save_chart(f"Reward {self.state}_step", reward)
+
+        print(
+            f"{self.state} - "
+            f"Episode {episode} - "
+            f"Step {step} - "                
+            f"Action {action} - "
+            f"Reward {reward} - "
+            f"Info {info}"
+        )

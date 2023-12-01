@@ -49,12 +49,12 @@ for e in range(episodes):
         agent.cache(state, next_state, action, reward, truncated)
         vid.capture_frame()
 
-        logger.log_step(reward, None, None, info, action)
         logger.record_action_and_info(
             episode=e,
             step=agent.curr_step,
             action=action,
-            info=info
+            info=info,
+            reward=reward
         )
         is_done = truncated
 
@@ -63,18 +63,10 @@ for e in range(episodes):
         if terminated or truncated:
             break
 
-    logger.log_episode()
 
     if is_done:
         print(f"Game is done episode: {e} step: {agent.curr_step}")
         break
-
-    if e % 20 == 0:
-        logger.record(
-            episode=e,
-            epsilon=agent.exploration_rate,
-            step=agent.curr_step
-        )
 
 
 vid.close()
