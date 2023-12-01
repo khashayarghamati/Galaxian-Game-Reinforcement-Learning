@@ -5,7 +5,7 @@
 #PBS -l nodes=3:ppn=20
 #PBS -k oe
 #PBS -l pmem=3gb
-#PBS -q cpu
+#PBS -q main
 
 echo ------------------------------------------------------
 echo -n 'Job is running on node '; cat $PBS_NODEFILE
