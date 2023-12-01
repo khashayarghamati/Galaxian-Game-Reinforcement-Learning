@@ -12,7 +12,7 @@ import torch.optim as optim
 
 
 class Agent:
-    def __init__(self, state_dim, action_dim, save_dir, checkpoint=None):
+    def __init__(self, state_dim, action_dim, save_dir, checkpoint=None, prefer_CPU=False):
         self.state_dim = state_dim
         self.action_dim = action_dim
 
@@ -30,7 +30,7 @@ class Agent:
         self.memory = deque(maxlen=Config.total_episode)
         self.batch_size = 32
 
-        self.use_cuda = torch.cuda.is_available()
+        self.use_cuda = torch.cuda.is_available() if not prefer_CPU else False
 
         if self.use_cuda:
             self.q_network = Model(self.state_dim, self.action_dim).cuda()
