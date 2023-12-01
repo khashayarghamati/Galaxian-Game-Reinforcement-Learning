@@ -56,7 +56,9 @@ class Agent:
             else:
                 state = torch.tensor(state, dtype=torch.float).unsqueeze(0)
             q_value = self.q_network(state)
+            print(f"q_value: {q_value}")
             action_idx = torch.argmax(q_value).item()
+            print(f"action_idx: {action_idx}")
 
         # decrease exploration_rate
         self.exploration_rate *= self.exploration_rate_decay

@@ -46,9 +46,6 @@ for e in range(episodes):
 
         next_state, reward, terminated, truncated, info = env.step(action)
 
-        print(f"next_state: {next_state}")
-        print(f"Actions: {env.action_space}")
-
         agent.cache(state, next_state, action, reward, truncated)
         vid.capture_frame()
 
