@@ -31,7 +31,7 @@ checkpoint = Path('agent_net_29.chkpt')
 agent = Agent(state_dim=(4, 84, 84), action_dim=env.action_space.n, save_dir=save_dir, checkpoint=checkpoint)
 agent.exploration_rate = agent.exploration_rate_min
 
-# logger = MetricLogger(save_dir)
+logger = MetricLogger(save_dir, "Replay")
 
 episodes = 40000
 
@@ -49,10 +49,20 @@ for e in range(episodes):
         vid.capture_frame()
         q, loss = agent.learn()
 
+        logger.log_step(reward, loss, q)
+
         state = next_state
 
         if done or truncated:
             break
+    logger.log_episode()
+
+    if e % 20 == 0:
+        logger.record(
+            episode=e,
+            epsilon=agent.exploration_rate,
+            step=agent.curr_step
+        )
 
 
 vid.close()

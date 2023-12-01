@@ -6,8 +6,9 @@ from neptune_kit import Neptune
 
 
 class MetricLogger():
-    def __init__(self, save_dir):
-        self.save_log = save_dir / "log"
+    def __init__(self, save_dir, state='Train'):
+        self.state = state
+        self.save_log = save_dir / f"log_{state}"
         with open(self.save_log, "w") as f:
             f.write(
                 f"{'Episode':>8}{'Step':>8}{'Epsilon':>10}{'MeanReward':>15}"
@@ -82,6 +83,7 @@ class MetricLogger():
         time_since_last_record = np.round(self.record_time - last_record_time, 3)
 
         print(
+            f"{self.state} - "
             f"Episode {episode} - "
             f"Step {step} - "
             f"Epsilon {epsilon} - "
@@ -93,15 +95,12 @@ class MetricLogger():
             f"Time {datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')}"
         )
 
-        Neptune().save_chart("Episode", episode)
-        Neptune().save_chart("Step", step)
-        Neptune().save_chart("Epsilon", epsilon)
-        Neptune().save_chart("Mean_Reward", mean_ep_reward)
-        Neptune().save_chart("Mean_Length", mean_ep_length)
-        Neptune().save_chart("Mean_Loss", mean_ep_loss)
-        Neptune().save_chart("Mean_Q_Value", mean_ep_q)
-        Neptune().save_chart("Time_Delta", time_since_last_record)
-        Neptune().save_chart("Time", datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'))
+        Neptune().save_chart(f"Episode_{self.state}", episode)
+        Neptune().save_chart(f"Step_{self.state}", step)
+        Neptune().save_chart(f"Epsilon_{self.state}", epsilon)
+        Neptune().save_chart(f"Mean_Reward_{self.state}", mean_ep_reward)
+        Neptune().save_chart(f"Mean_Loss_{self.state}", mean_ep_loss)
+        Neptune().save_chart(f"Mean_Q_Value_{self.state}", mean_ep_q)
 
         with open(self.save_log, "a") as f:
             f.write(
