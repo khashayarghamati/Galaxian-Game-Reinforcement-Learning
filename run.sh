@@ -1,11 +1,11 @@
 #!/bin/bash -l
 #PBS -N GALRL
 #PBS -m abe
-#PBS -l walltime=24:00:00
+#PBS -l walltime=98:00:00
 #PBS -l nodes=3:ppn=20
 #PBS -k oe
-#PBS -l pmem=2gb
-#PBS -q gpu
+#PBS -l pmem=3gb
+#PBS -q cpu
 
 echo ------------------------------------------------------
 echo -n 'Job is running on node '; cat $PBS_NODEFILE
