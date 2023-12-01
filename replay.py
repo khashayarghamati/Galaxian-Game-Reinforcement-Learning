@@ -33,7 +33,7 @@ agent.exploration_rate = agent.exploration_rate_min
 
 logger = MetricLogger(save_dir, "Replay")
 
-episodes = 500
+episodes = 40000
 
 for e in range(episodes):
 
