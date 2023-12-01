@@ -36,7 +36,7 @@ class Agent:
             self.q_network = Model(self.state_dim, self.action_dim).cuda()
             self.q_network = self.q_network.to(device='cuda')
         else:
-            self.q_network = QNetwork(self.state_dim, self.action_dim)
+            self.q_network = Model(self.state_dim, self.action_dim)
 
         self.optimizer = optim.Adam(self.q_network.parameters(), lr=Config.lr)
 
@@ -51,7 +51,10 @@ class Agent:
 
         # EXPLOIT
         else:
-            state = torch.tensor(state, dtype=torch.float, device='cuda').unsqueeze(0)
+            if self.use_cuda:
+                state = torch.tensor(state, dtype=torch.float, device='cuda').unsqueeze(0)
+            else:
+                state = torch.tensor(state, dtype=torch.float).unsqueeze(0)
             q_value = self.q_network(state)
             action_idx = torch.argmax(q_value).item()
 
@@ -74,9 +77,12 @@ class Agent:
         # state_tensor = self.to_tensor(np.reshape(state_tensor, [1, self.state_dim]))
 
         # Update Q-values using the Double Q-learning update rule
-
-        state = torch.tensor(state, dtype=torch.float, device='cuda')
-        next_state = torch.tensor(next_state_tensor, dtype=torch.float, device='cuda')
+        if self.use_cuda:
+            state = torch.tensor(state, dtype=torch.float, device='cuda')
+            next_state = torch.tensor(next_state_tensor, dtype=torch.float, device='cuda')
+        else:
+            state = torch.tensor(state, dtype=torch.float)
+            next_state = torch.tensor(next_state_tensor, dtype=torch.float)
 
         q_value = self.q_network(state)
         q_evaluation = self.q_network(next_state)
