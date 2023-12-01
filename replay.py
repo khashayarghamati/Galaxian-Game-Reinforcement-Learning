@@ -49,6 +49,12 @@ for e in range(episodes):
         vid.capture_frame()
 
         logger.log_step(reward, None, None, info, action)
+        logger.record_action_and_info(
+            episode=e,
+            step=agent.curr_step,
+            action=action,
+            info=info
+        )
         is_done = truncated
 
         state = next_state
