@@ -64,9 +64,9 @@ for e in range(episodes):
             break
 
 
-    if is_done:
-        print(f"Game is done episode: {e} step: {agent.curr_step}")
-        break
+    # if is_done:
+    #     print(f"Game is done episode: {e} step: {agent.curr_step}")
+    #     break
 
 
 vid.close()
