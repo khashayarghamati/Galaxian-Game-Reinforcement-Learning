@@ -113,8 +113,11 @@ class Agent:
                                        next_state_tensor=next_state, done=done)
         return q, loss
 
-    def save(self):
-        save_path = self.save_dir / f"agent_net_{int(self.curr_step // self.save_every)}.chkpt"
+    def save(self, is_done=False):
+        if is_done:
+            save_path = self.save_dir / f"agent_net_{int(self.curr_step // self.save_every)}_DONE.chkpt"
+        else:
+            save_path = self.save_dir / f"agent_net_{int(self.curr_step // self.save_every)}.chkpt"
 
         torch.save(
             dict(
@@ -123,7 +126,10 @@ class Agent:
             ),
             save_path
         )
-        print(f"agent saved to {save_path} at step {self.curr_step}")
+        if is_done:
+            print(f"agent saved to {save_path} at step {self.curr_step} and is done")
+        else:
+            print(f"agent saved to {save_path} at step {self.curr_step}")
 
     def load(self, load_path):
         if not load_path.exists():

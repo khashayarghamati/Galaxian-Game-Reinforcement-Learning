@@ -38,9 +38,11 @@ class MetricLogger():
         # Timing
         self.record_time = time.time()
 
-    def log_step(self, reward, loss, q):
+    def log_step(self, reward, loss, q, info, action):
+        self.action = action
         self.curr_ep_reward += reward
         self.curr_ep_length += 1
+        self.info = info
         if loss:
             self.curr_ep_loss += loss
             self.curr_ep_q += q
@@ -91,8 +93,10 @@ class MetricLogger():
             f"Mean Length {mean_ep_length} - "
             f"Mean Loss {mean_ep_loss} - "
             f"Mean Q Value {mean_ep_q} - "
+            f"Action {self.action} - "
             f"Time Delta {time_since_last_record} - "
             f"Time {datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')}"
+            f"Info {self.info}"
         )
 
         Neptune().save_chart(f"Episode_{self.state}", episode)
@@ -101,6 +105,7 @@ class MetricLogger():
         Neptune().save_chart(f"Mean_Reward_{self.state}", mean_ep_reward)
         Neptune().save_chart(f"Mean_Loss_{self.state}", mean_ep_loss)
         Neptune().save_chart(f"Mean_Q_Value_{self.state}", mean_ep_q)
+        Neptune().save_chart(f"Action {self.state}", self.action)
 
         with open(self.save_log, "a") as f:
             f.write(

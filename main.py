@@ -46,19 +46,23 @@ for e in range(episodes):
     while True:
         action = agent.act(state[0])
 
-        next_state, reward, done, truncated, info = env.step(action)
+        next_state, reward, terminated, truncated, info = env.step(action)
 
-        agent.cache(state[0], next_state, action, reward, done)
+        agent.cache(state[0], next_state, action, reward, terminated)
 
         # vid.capture_frame()
         q, loss = agent.learn()
 
-        logger.log_step(reward, loss, q)
-
-        if done or truncated:
+        logger.log_step(reward, loss, q, info)
+        is_done = terminated
+        if terminated or truncated:
             break
-
     logger.log_episode()
+
+    if is_done:
+        print(f"Game is done episode: {e} step: {agent.curr_step}")
+        agent.save()
+        break
 
     if e % 20 == 0:
         logger.record(
