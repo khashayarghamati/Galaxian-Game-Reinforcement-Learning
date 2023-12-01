@@ -48,13 +48,13 @@ for e in range(episodes):
 
         next_state, reward, terminated, truncated, info = env.step(action)
 
-        agent.cache(state[0], next_state, action, reward, terminated)
+        agent.cache(state[0], next_state, action, reward, truncated)
 
         # vid.capture_frame()
         q, loss = agent.learn()
 
         logger.log_step(reward, loss, q, info)
-        is_done = terminated
+        is_done = truncated
         if terminated or truncated:
             break
     logger.log_episode()

@@ -45,11 +45,11 @@ for e in range(episodes):
         action = agent.act(state)
 
         next_state, reward, terminated, truncated, info = env.step(action)
-        agent.cache(state, next_state, action, reward, terminated)
+        agent.cache(state, next_state, action, reward, truncated)
         vid.capture_frame()
 
         logger.log_step(reward, None, None, info, action)
-        is_done = terminated
+        is_done = truncated
 
         state = next_state
 
